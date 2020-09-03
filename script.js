@@ -3,8 +3,8 @@ const app = new Vue({
     data() {
         return {
             hamburger: false,
-            dark: false,
-            tool: 'pencil',
+            dark: true,
+            tool: 'line',
             color: '#ff0000',
 
 
@@ -49,6 +49,41 @@ const app = new Vue({
         },
         drawPencil(event){
             console.log('drawing pencil', event.clientX);
+        },
+        
+        importArt(event){
+            var fr=new FileReader(); 
+            fr.onload=function(){ 
+                app.art = JSON.parse(fr.result);
+            } 
+            fr.readAsText(event.target.files[0]); 
+        },
+
+        exportArt(){
+            
+            var textFile = null,
+            makeTextFile = function (text) {
+            var data = new Blob([text], {type: 'text/plain'});
+            if (textFile !== null) {
+                window.URL.revokeObjectURL(textFile);
+            }
+            textFile = window.URL.createObjectURL(data);
+            return textFile;
+            };
+
+            var file_path = 'host/path/drawing.drw';
+            var a = document.createElement('A');
+            a.href = makeTextFile(JSON.stringify(app.art));
+            a.download = file_path.substr(file_path.lastIndexOf('/') + 1);
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);      
+        },
+        trash(){
+            if(confirm("Are you sure?")){
+                this.art.line = [];
+            }
         }
+
     },
 });

@@ -20,11 +20,12 @@
                 <li @click="selectTool('circle', $event)" title="Circle" :class="{activeTool: tool == 'circle'}"><i class="far fa-circle"></i></li>
                 <li @click="selectTool('square', $event)" title="Square" :class="{activeTool: tool == 'square'}"><i class="far fa-square"></i></li>
                 <li><input type="color" class="colorPicker" v-model="color"></li>
+                <li @click="trash"><i class="fas fa-trash-alt"></i></li>
             </ul>
             <ul class="itemOptions" v-if="hamburger">
                 <li><i class="fas fa-save"></i>Save</li>
-                <li><i class="fas fa-upload"></i>Import</li>
-                <li><i class="fas fa-download"></i>Export</li>
+                <li><i class="fas fa-upload"></i>Import <input type="file" @change="importArt"></li>
+                <li @click="exportArt"><i class="fas fa-download"></i>Export</li>
                 <li @click="dark = !dark"><i class="fas" :class="{'fa-moon': !dark, 'fa-sun': dark}"></i>{{dark ? 'Light' : 'Dark'}} Theme</li>
                 <li onclick="print();"><i class="fas fa-print"></i>Print</li>
                 <li onclick="confirm('Are you really want to close?') ? window.close() : ''"><i class="fas fa-sign-out-alt"></i></i>Close</li>
