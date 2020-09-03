@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="This is web based drawing tool made with JavaScript (vue.js) which contain functions related to print and save the drawings">
+    <link rel="stylesheet" href="./style.css">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://kit.fontawesome.com/029682b453.js" crossorigin="anonymous"></script>
+    <title>WebDraw</title>
+</head>
+<body>
+    <div id="app">
+        <div class="menu" :style="{'color' : dark ? 'white' : 'black', 'background-color' : dark ? 'rgb(102, 100, 100)' : 'rgb(223 223 223)'}">
+            <ul class="navItems">
+                <li id="hamburger" @click="hamburger = !hamburger"><i class="fas" :class="{'fa-bars': !hamburger, 'fa-times-circle': hamburger}"></i></li>
+                <li><i class="fas fa-pencil-alt" title="Pencil"></i></li>
+                <li><i class="fas fa-eraser" title="Eraser"></i></li>
+                <li><i class="far fa-circle" title="Circle"></i></li>
+                <li><i class="far fa-square" title="Square"></i></li>
+            </ul>
+            <ul class="itemOptions" v-if="hamburger">
+                <li><i class="fas fa-save"></i>Save</li>
+                <li><i class="fas fa-upload"></i>Import</li>
+                <li><i class="fas fa-download"></i>Export</li>
+                <li @click="dark = !dark"><i class="fas" :class="{'fa-moon': !dark, 'fa-sun': dark}"></i>{{dark ? 'Light' : 'Dark'}} Theme</li>
+                <li onclick="print();"><i class="fas fa-print"></i>Print</li>
+                <li onclick="confirm('Are you really want to close?') ? window.close() : ''"><i class="fas fa-sign-out-alt"></i></i>Close</li>
+            </ul>
+        </div>
+
+        <svg class="artboard" :style="{'background-color' : dark ? 'black' : 'white'}">
+            <circle cx="400" cy="300" r="40" stroke="green" stroke-width="4" fill="yellow" />
+        </svg>
+
+        
+    </div>
+</body>
+<script src="./script.js"></script>
+</html>

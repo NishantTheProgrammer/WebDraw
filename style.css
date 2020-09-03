@@ -1,0 +1,88 @@
+@import url('https://fonts.googleapis.com/css2?family=Balsamiq+Sans&display=swap');
+
+*{
+    font-family: 'Balsamiq Sans', cursive;
+    margin: 0;
+    padding: 0;
+}
+body{
+    overflow: hidden;
+}
+
+
+::-webkit-scrollbar
+{
+    display: none;
+}
+
+.menu{
+
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    border-radius: 20px;
+    transition: background-color, color .5s ease;
+}
+.navItems{
+    display: flex;
+    padding: 10px;
+    list-style: none;
+    transition: background-color .5s ease;
+}
+.navItems li{
+    border-radius: 100%;
+    font-size: 1.2rem;
+    margin: 5px;
+    height: 30px;
+    width: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5rem;
+    padding: 5px;
+}
+#hamburger{
+    border-radius: 10px;
+}
+.navItems li:hover{
+    background-color: rgba(179, 179, 179, 0.767);
+    cursor: pointer;
+}
+
+.itemOptions{
+    background-color: rgba(102, 100, 100, 0.295);
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    
+    animation-name: opacity;
+    animation-duration: 1s;
+    animation-fill-mode: forwards;
+    opacity: 0;
+    overflow: hidden;
+}
+@keyframes opacity{
+    to{
+        opacity: 1;
+    }
+}
+
+
+
+.itemOptions li{
+    list-style: none;
+    padding: 10px 20px;
+    
+}
+.itemOptions li i{
+    margin-right: 10px;
+}
+
+.itemOptions li:hover{
+    background-color:#949494;
+    cursor: pointer;
+}
+.artboard{
+    height: 100vh;
+    width: 100vw;
+    transition: background-color .5s ease;
+}
