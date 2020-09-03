@@ -75,6 +75,7 @@ body{
 }
 .itemOptions li i{
     margin-right: 10px;
+    pointer-events: none;
 }
 
 .itemOptions li:hover{
@@ -85,4 +86,17 @@ body{
     height: 100vh;
     width: 100vw;
     transition: background-color .5s ease;
+}
+.activeTool{
+    background-color: rgba(179, 179, 179, 0.767);
+}
+
+.colorPicker{
+    border: none;
+}
+
+@media print {
+    .menu{
+        display: none;
+    }
 }
