@@ -4,9 +4,11 @@ const app = new Vue({
         return {
             hamburger: false,
             dark: true,
+            openModal: false,
+            openOptions: [],
             tool: 'line',
             color: '#ff0000',
-
+            name: 'draw',
 
             art: {
                 line: []
@@ -50,6 +52,32 @@ const app = new Vue({
         drawPencil(event){
             console.log('drawing pencil', event.clientX);
         },
+        saveArt(){
+            this.name = prompt('Enter File Name', this.name);
+            if(this.name)
+            {
+                console.log(this.name);
+                localStorage.setItem(`art_${this.name}`, JSON.stringify(app.art));
+            }
+        },
+        showOpen(){
+            this.openModal = !this.openModal;
+            if(this.openModal){
+                for(let i in localStorage)
+                {
+                    if(i.substring(0, 4) === 'art_')
+                    {
+                        this.openOptions.push(i);
+                    }
+                }
+            } 
+        },
+        openArt(event){
+            let key = event.target.value;
+            this.name = key.substring(4, key.length)
+            this.art = JSON.parse(localStorage.getItem(key));
+            
+        },
         
         importArt(event){
             var fr=new FileReader(); 
@@ -71,7 +99,7 @@ const app = new Vue({
             return textFile;
             };
 
-            var file_path = 'host/path/drawing.drw';
+            var file_path = `host/path/${this.name}.drw`;
             var a = document.createElement('A');
             a.href = makeTextFile(JSON.stringify(app.art));
             a.download = file_path.substr(file_path.lastIndexOf('/') + 1);

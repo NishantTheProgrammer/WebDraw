@@ -23,7 +23,14 @@
                 <li @click="trash"><i class="fas fa-trash-alt"></i></li>
             </ul>
             <ul class="itemOptions" v-if="hamburger">
-                <li><i class="fas fa-save"></i>Save</li>
+                <li @click="saveArt"><i class="fas fa-save"></i>Save</li>
+                <li @click="showOpen"><i class="fas fa-folder-open"></i>Open</li>
+                <li id="openOptions" v-if="openModal">
+                    <select @change="openArt">
+                        <option value="">Choose an Item</option>
+                        <option :value="option" v-for="option in openOptions">{{option.substring(4, option.length)}}</option>
+                    </select>
+                </li>
                 <li><i class="fas fa-upload"></i>Import <input type="file" @change="importArt"></li>
                 <li @click="exportArt"><i class="fas fa-download"></i>Export</li>
                 <li @click="dark = !dark"><i class="fas" :class="{'fa-moon': !dark, 'fa-sun': dark}"></i>{{dark ? 'Light' : 'Dark'}} Theme</li>

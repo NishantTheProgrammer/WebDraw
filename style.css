@@ -15,6 +15,7 @@ body{
     display: none;
 }
 
+
 .menu{
 
     position: absolute;
@@ -93,6 +94,20 @@ body{
 
 .colorPicker{
     border: none;
+}
+
+#openOptions{
+    padding: 0;
+}
+
+#openOptions select{
+    height: 100%;
+    width: 100%;
+    padding: 10px 20px;
+    background-color: rgb(102, 100, 100);
+    font-size: 1rem;
+    color: white;
+    outline: none;
 }
 
 @media print {
