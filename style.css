@@ -110,6 +110,20 @@ body{
     outline: none;
 }
 
+#stroke-width{
+    width: auto;
+}
+#stroke-width:hover{
+    background-color: initial;
+}
+
+
+
+
+
+
+
+
 @media print {
     .menu{
         display: none;

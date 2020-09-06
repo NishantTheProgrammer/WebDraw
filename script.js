@@ -2,13 +2,18 @@ const app = new Vue({
     el: '#app',
     data() {
         return {
+            name: 'draw',
             hamburger: false,
             dark: true,
             openModal: false,
             openOptions: [],
             tool: 'line',
-            color: '#ff0000',
-            name: 'draw',
+
+
+            stroke: '#ff0000',
+            fill: '#821717',
+            strokeWidth: 5,
+            linecap: 'square',
 
             art: {
                 line: []
@@ -29,13 +34,27 @@ const app = new Vue({
             }
         },
         start(event){
+            switch(this.tool)
+            {
+                case 'line': this.startLine(event); break;
+                case 'circle': this.drawCircle(event); break;
+                case 'square': this.drawSquare(event); break;
+                case 'pencil': this.drawPencil(event); break;
+            }
+        },
+
+        startLine(event){
             this.art.line.push({
                 x1: event.clientX, y1: event.clientY,
                 x2: event.clientX, y2: event.clientY,
-                color: this.color,
-                width: 5
+                stroke: this.stroke,
+                width: this.strokeWidth,
+                linecap: this.linecap
             });
         },
+
+
+
         drawLine(event){
             if(event.buttons == 1 || event.buttons == 3){
                 let lastLine = this.art.line[this.art.line.length - 1];

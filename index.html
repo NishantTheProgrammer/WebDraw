@@ -19,8 +19,17 @@
                 <li @click="selectTool('line', $event)" title="Line" :class="{activeTool: tool == 'line'}"><i class="fas fa-slash"></i></li>
                 <li @click="selectTool('circle', $event)" title="Circle" :class="{activeTool: tool == 'circle'}"><i class="far fa-circle"></i></li>
                 <li @click="selectTool('square', $event)" title="Square" :class="{activeTool: tool == 'square'}"><i class="far fa-square"></i></li>
-                <li><input type="color" class="colorPicker" v-model="color"></li>
-                <li @click="trash"><i class="fas fa-trash-alt"></i></li>
+                <li title="Stroke"><input type="color" class="colorPicker" v-model="stroke"></li>
+                <li title="Fill"><input type="color" class="colorPicker" v-model="fill"></li>
+                <li  title="Stroke Linecap" >
+                    <select style="height: 100%;" v-model="linecap">
+                        <option value="square">&#11035;</option>
+                        <option value="round">&#9899;</option>
+                    </select>
+                </li>
+                <li title="Stroke Width" id="stroke-width"><input type="range" name="vol" min="1" max="50" v-model="strokeWidth"></li>
+                <li @click="trash" title="Trash"><i class="fas fa-trash-alt"></i></li>
+
             </ul>
             <ul class="itemOptions" v-if="hamburger">
                 <li @click="saveArt"><i class="fas fa-save"></i>Save</li>
@@ -45,7 +54,7 @@
                 :y1="line.y1" 
                 :x2="line.x2" 
                 :y2="line.y2" 
-                :style="{stroke: line.color, 'stroke-width': line.width}" 
+                :style="{stroke: line.stroke, 'stroke-width': line.width, 'stroke-linecap': line.linecap}" 
             />
         </svg>
 
