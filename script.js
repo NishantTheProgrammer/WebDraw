@@ -7,16 +7,18 @@ const app = new Vue({
             dark: true,
             openModal: false,
             openOptions: [],
-            tool: 'line',
+            tool: 'circle',
 
 
             stroke: '#ff0000',
             fill: '#821717',
             strokeWidth: 5,
-            linecap: 'square',
+            linecap: 'butt',
 
             art: {
-                line: []
+                line: [],
+                rect: [],
+                circle: []
             }
         }
     },
@@ -29,16 +31,17 @@ const app = new Vue({
             {
                 case 'line': this.drawLine(event); break;
                 case 'circle': this.drawCircle(event); break;
-                case 'square': this.drawSquare(event); break;
+                case 'rect': this.drawRect(event); break;
                 case 'pencil': this.drawPencil(event); break;
             }
         },
         start(event){
+
             switch(this.tool)
             {
                 case 'line': this.startLine(event); break;
-                case 'circle': this.drawCircle(event); break;
-                case 'square': this.drawSquare(event); break;
+                case 'circle': this.startCircle(event); break;
+                case 'rect': this.startRect(event); break;
                 case 'pencil': this.drawPencil(event); break;
             }
         },
@@ -48,9 +51,31 @@ const app = new Vue({
                 x1: event.clientX, y1: event.clientY,
                 x2: event.clientX, y2: event.clientY,
                 stroke: this.stroke,
-                width: this.strokeWidth,
+                strokeWidth: this.strokeWidth != 0 ? this.strokeWidth : 1,      // line should at least have 1 stroke width
                 linecap: this.linecap
             });
+        },
+
+        startRect(event){
+            this.art.rect.push({
+                x: event.clientX, y: event.clientY,
+                width: 0, height: 0,
+                stroke: this.stroke,
+                fill: this.fill,
+                strokeWidth: this.strokeWidth,
+                radius: 0
+            });
+        },
+
+        startCircle(event){
+            this.art.circle.push({
+                x: event.clientX, y: event.clientY,
+                stroke: this.stroke,
+                fill: this.fill,
+                strokeWidth: this.strokeWidth,
+                radius: 0
+            });
+            console.log(this.art.circle)
         },
 
 
@@ -63,10 +88,24 @@ const app = new Vue({
             }
         },
         drawCircle(event){
-            console.log('drawing circle', event.clientX);
+            if(event.buttons == 1 || event.buttons == 3){
+                let lastCircle = this.art.circle[this.art.circle.length - 1];
+                // pythagoras theorem
+
+                let a = Math.abs(lastCircle.x - event.clientX);
+                let b = Math.abs(lastCircle.y - event.clientY);
+                lastCircle.radius = Math.sqrt((a * a) + (b * b));
+            }
         },
-        drawSquare(event){
-            console.log('drawing square', event.clientX);
+        drawRect(event){
+            if(event.buttons == 1 || event.buttons == 3){
+                let lastRect = this.art.rect[this.art.rect.length - 1];
+                if(event.clientX - lastRect.x > 0 && event.clientY - lastRect.y > 0)
+                {
+                    lastRect.width = event.clientX - lastRect.x;
+                    lastRect.height = event.clientY - lastRect.y;
+                }
+            }
         },
         drawPencil(event){
             console.log('drawing pencil', event.clientX);
@@ -129,8 +168,21 @@ const app = new Vue({
         trash(){
             if(confirm("Are you sure?")){
                 this.art.line = [];
+                this.art.rect = [];
+                this.art.circle = [];
+            }
+        },
+        keydown(event){
+            if(this.tool == 'rect' && this.art.rect.length > 0)
+            {
+                let lastRect = this.art.rect[this.art.rect.length - 1];
+                event.key == 'ArrowDown' && lastRect.radius > 0 ? lastRect.radius -= 2 : '';
+                event.key == 'ArrowUp' ? lastRect.radius += 2 : '';
+                console.log(lastRect.radius)
             }
         }
-
     },
 });
+
+
+document.addEventListener("keydown", app.keydown);

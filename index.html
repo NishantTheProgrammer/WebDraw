@@ -18,16 +18,16 @@
                 <li @click="selectTool('eraser', $event)" title="Eraser" :class="{activeTool: tool == 'eraser'}"><i class="fas fa-eraser"></i></li>
                 <li @click="selectTool('line', $event)" title="Line" :class="{activeTool: tool == 'line'}"><i class="fas fa-slash"></i></li>
                 <li @click="selectTool('circle', $event)" title="Circle" :class="{activeTool: tool == 'circle'}"><i class="far fa-circle"></i></li>
-                <li @click="selectTool('square', $event)" title="Square" :class="{activeTool: tool == 'square'}"><i class="far fa-square"></i></li>
+                <li @click="selectTool('rect', $event)" title="Rectangle" :class="{activeTool: tool == 'rect'}"><i class="far fa-square"></i></li>
                 <li title="Stroke"><input type="color" class="colorPicker" v-model="stroke"></li>
-                <li title="Fill"><input type="color" class="colorPicker" v-model="fill"></li>
-                <li  title="Stroke Linecap" >
+                <li title="Fill" v-if="tool == 'rect' || tool == 'circle'"><input type="color" class="colorPicker" v-model="fill"></li>
+                <li  title="Stroke Linecap" v-if="tool == 'line'">
                     <select style="height: 100%;" v-model="linecap">
-                        <option value="square">&#11035;</option>
+                        <option value="butt">&#11035;</option>
                         <option value="round">&#9899;</option>
                     </select>
                 </li>
-                <li title="Stroke Width" id="stroke-width"><input type="range" name="vol" min="1" max="50" v-model="strokeWidth"></li>
+                <li title="Stroke Width" id="stroke-width"><input type="range" name="vol" min="0" max="50" v-model="strokeWidth"></li>
                 <li @click="trash" title="Trash"><i class="fas fa-trash-alt"></i></li>
 
             </ul>
@@ -49,13 +49,33 @@
         </div>
 
         <svg class="artboard" :style="{'background-color' : dark ? 'black' : 'white'}" @mousemove="move" @mousedown="start">
+            <rect v-for="rect in art.rect" 
+                :x="rect.x"
+                :y="rect.y"
+                :width="rect.width"
+                :height="rect.height"
+                :rx="rect.radius"
+                :ry="rect.radius"
+                :style="{fill: rect.fill, stroke: rect.stroke, 'stroke-width': rect.strokeWidth}"
+            />
+
+            <circle v-for="circle in art.circle" 
+                :cx="circle.x"
+                :cy="circle.y"
+                :r="circle.radius"
+                :stroke="circle.stroke"
+                :stroke-width="circle.strokeWidth"
+                :fill="circle.fill"
+            />
+
             <line v-for="line in art.line" 
                 :x1="line.x1" 
                 :y1="line.y1" 
                 :x2="line.x2" 
                 :y2="line.y2" 
-                :style="{stroke: line.stroke, 'stroke-width': line.width, 'stroke-linecap': line.linecap}" 
+                :style="{stroke: line.stroke, 'stroke-width': line.strokeWidth, 'stroke-linecap': line.linecap}" 
             />
+
         </svg>
 
         
