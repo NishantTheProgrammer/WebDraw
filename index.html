@@ -49,37 +49,57 @@
         </div>
 
         <svg class="artboard" :style="{'background-color' : dark ? 'black' : 'white'}" @mousemove="move" @mousedown="start">
+            
+            
+            
+
             <rect v-for="rect in art.rect" 
-                :x="rect.x"
+            :x="rect.x"
                 :y="rect.y"
                 :width="rect.width"
                 :height="rect.height"
                 :rx="rect.radius"
                 :ry="rect.radius"
                 :style="{fill: rect.fill, stroke: rect.stroke, 'stroke-width': rect.strokeWidth}"
-            />
-
-            <circle v-for="circle in art.circle" 
+                />
+                
+                <circle v-for="circle in art.circle" 
                 :cx="circle.x"
                 :cy="circle.y"
                 :r="circle.radius"
                 :stroke="circle.stroke"
                 :stroke-width="circle.strokeWidth"
                 :fill="circle.fill"
-            />
-
-            <line v-for="line in art.line" 
+                />
+                
+                <line v-for="line in art.line" 
                 :x1="line.x1" 
                 :y1="line.y1" 
                 :x2="line.x2" 
                 :y2="line.y2" 
                 :style="{stroke: line.stroke, 'stroke-width': line.strokeWidth, 'stroke-linecap': line.linecap}" 
-            />
-
-        </svg>
-
-        
-    </div>
-</body>
-<script src="./script.js"></script>
-</html>
+                />
+                
+                <polyline v-for="(point, i) in points" :title="art.polyline[i][0].width"
+                :points="point"
+                :style="{
+                    fill:'none', 
+                    stroke: art.polyline[i][0].stroke, 
+                    'stroke-width': art.polyline[i][0].width}" 
+                    />
+                    
+                <polyline v-for="(point, i) in eraserPoints" :title="art.eraser[i][0].width"
+                :points="point"
+                :style="{
+                    fill:'none', 
+                    stroke: dark ? 'black' : 'white', 
+                    'stroke-width': art.eraser[i][0].width}" 
+                />
+            
+                </svg>
+            
+            
+        </div>
+    </body>
+    <script src="./script.js"></script>
+    </html>

@@ -7,7 +7,7 @@ const app = new Vue({
             dark: true,
             openModal: false,
             openOptions: [],
-            tool: 'circle',
+            tool: 'pencil',
 
 
             stroke: '#ff0000',
@@ -16,10 +16,44 @@ const app = new Vue({
             linecap: 'butt',
 
             art: {
+                polyline: [],
                 line: [],
                 rect: [],
-                circle: []
+                circle: [],
+                eraser: []
             }
+        }
+    },
+    computed: {
+        points(){
+            let polylines = [];
+            let p;
+            this.art.polyline.forEach(polyline => {
+                p = '';
+                polyline.forEach(point => {
+                    p += `${point.x},${point.y} `;
+                });
+                polylines.push(p);
+            });
+
+            console.log(polylines);
+
+            return polylines;
+        },
+        eraserPoints(){
+            let polylines = [];
+            let p;
+            this.art.eraser.forEach(eraser => {
+                p = '';
+                eraser.forEach(point => {
+                    p += `${point.x},${point.y} `;
+                });
+                polylines.push(p);
+            });
+
+            console.log(polylines);
+
+            return polylines;
         }
     },
     methods: {
@@ -33,6 +67,7 @@ const app = new Vue({
                 case 'circle': this.drawCircle(event); break;
                 case 'rect': this.drawRect(event); break;
                 case 'pencil': this.drawPencil(event); break;
+                case 'eraser': this.drawEraser(event); break;
             }
         },
         start(event){
@@ -42,7 +77,8 @@ const app = new Vue({
                 case 'line': this.startLine(event); break;
                 case 'circle': this.startCircle(event); break;
                 case 'rect': this.startRect(event); break;
-                case 'pencil': this.drawPencil(event); break;
+                case 'pencil': this.startPencil(event); break;
+                case 'eraser': this.startEraser(event); break;
             }
         },
 
@@ -80,6 +116,27 @@ const app = new Vue({
 
 
 
+        startPencil(event){
+            
+            this.art.polyline.push([{
+                x: event.clientX, 
+                y: event.clientY,
+                width: this.strokeWidth != 0 ? this.strokeWidth : 1,
+                stroke: this.stroke
+            }]);
+        },
+
+        startEraser(event){
+            console.log('hi');
+            this.art.eraser.push([{
+                x: event.clientX, 
+                y: event.clientY,
+                width: this.strokeWidth != 0 ? this.strokeWidth : 1,
+            }]);
+        },
+
+
+
         drawLine(event){
             if(event.buttons == 1 || event.buttons == 3){
                 let lastLine = this.art.line[this.art.line.length - 1];
@@ -108,8 +165,29 @@ const app = new Vue({
             }
         },
         drawPencil(event){
-            console.log('drawing pencil', event.clientX);
+            if(event.buttons == 1 || event.buttons == 3){
+                let lastLine = this.art.polyline[this.art.polyline.length - 1];
+
+                lastLine.push({
+                    x: event.clientX,
+                    y: event.clientY
+                })
+            }
         },
+
+        
+        drawEraser(event){
+            if(event.buttons == 1 || event.buttons == 3){
+                let lastLine = this.art.eraser[this.art.eraser.length - 1];
+
+                lastLine.push({
+                    x: event.clientX,
+                    y: event.clientY
+                })
+            }
+        },
+
+
         saveArt(){
             this.name = prompt('Enter File Name', this.name);
             if(this.name)
@@ -170,6 +248,8 @@ const app = new Vue({
                 this.art.line = [];
                 this.art.rect = [];
                 this.art.circle = [];
+                this.art.polyline = [];
+                this.art.eraser = [];
             }
         },
         keydown(event){
