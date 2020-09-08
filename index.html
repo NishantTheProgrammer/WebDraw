@@ -48,7 +48,9 @@
             </ul>
         </div>
 
-        <svg class="artboard" :style="{'background-color' : dark ? 'black' : 'white'}" @mousemove="move" @mousedown="start">
+        <svg class="artboard pencil" 
+        :style="{'background-color' : dark ? 'black' : 'white', cursor: `url('./cursors/${tool}.png'), auto`}" 
+        @mousemove="move" @mousedown="start">
             
             
             
