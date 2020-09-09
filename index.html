@@ -89,7 +89,7 @@
                 <polyline v-if="tool.tool == 'eraser'" 
                 :points="tool.points"
                 :style="{ fill:'none', 
-                    stroke: tool.stroke, 
+                    stroke: dark ? 'black' : 'white', 
                     'stroke-width': tool.width}" 
                 />
             </template>

@@ -90,8 +90,7 @@ const app = new Vue({
             this.art.push({
                 tool: 'eraser',
                 points: `${event.clientX},${event.clientY} `,
-                width: this.strokeWidth != 0 ? this.strokeWidth : 1,
-                stroke: this.dark ? 'black' : 'white'
+                width: this.strokeWidth != 0 ? this.strokeWidth : 1
             });
         },
         // update endpoint of line
