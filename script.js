@@ -14,13 +14,13 @@ const app = new Vue({
             fill: '#821717',
             strokeWidth: 5,
             linecap: 'butt'
-
         }
     },
     methods: {
         selectTool(tool, event){
             this.tool = tool;
         },
+        // function runs on drag
         move(event){
             switch(this.tool)
             {
@@ -31,8 +31,8 @@ const app = new Vue({
                 case 'eraser': this.drawEraser(event); break;
             }
         },
+        // functions runs on click on svg to insert a new SVG child object
         start(event){
-
             switch(this.tool)
             {
                 case 'line': this.startLine(event); break;
@@ -42,7 +42,7 @@ const app = new Vue({
                 case 'eraser': this.startEraser(event); break;
             }
         },
-
+        // starts line both starting and ending point are initially are cordinates of cursor
         startLine(event){
             this.art.push({
                 tool: 'line',
@@ -53,7 +53,7 @@ const app = new Vue({
                 linecap: this.linecap
             });
         },
-
+        // starts rectangle x and y point are initially are cordinates of cursor height and width is also 0
         startRect(event){
             this.art.push({
                 tool: 'rect',
@@ -65,7 +65,7 @@ const app = new Vue({
                 radius: 0
             });
         },
-
+        // starts rectangle x and y point are initially are cordinates of cursor radius is zero
         startCircle(event){
             this.art.push({
                 tool: 'circle',
@@ -76,9 +76,8 @@ const app = new Vue({
                 radius: 0
             });
         },
-
+        // start polyline for pencil with first node of cursor position
         startPencil(event){
-            
             this.art.push({
                 tool: 'polyline',
                 points: `${event.clientX},${event.clientY} `,
@@ -86,9 +85,8 @@ const app = new Vue({
                 stroke: this.stroke
             });
         },
-
+        // start polyline for eraser with first node of cursor position
         startEraser(event){
-            
             this.art.push({
                 tool: 'eraser',
                 points: `${event.clientX},${event.clientY} `,
@@ -96,7 +94,7 @@ const app = new Vue({
                 stroke: this.dark ? 'black' : 'white'
             });
         },
-
+        // update endpoint of line
         drawLine(event){
             if(event.buttons == 1 || event.buttons == 3){
                 let lastLine = this.art[this.art.length - 1];
@@ -104,18 +102,18 @@ const app = new Vue({
                 lastLine.y2 = event.clientY;
             }
         },
-
+        // update radius of circle
         drawCircle(event){
             if(event.buttons == 1 || event.buttons == 3){
                 let lastCircle = this.art[this.art.length - 1];
+                
                 // pythagoras theorem
-
                 let a = Math.abs(lastCircle.x - event.clientX);
                 let b = Math.abs(lastCircle.y - event.clientY);
                 lastCircle.radius = Math.sqrt((a * a) + (b * b));
             }
         },
-
+        // update height and width of the rectangle
         drawRect(event){
             if(event.buttons == 1 || event.buttons == 3){
                 let lastRect = this.art[this.art.length - 1];
@@ -126,21 +124,21 @@ const app = new Vue({
                 }
             }
         },
+        // push x,y cordinates of current cursor position of the pencil
         drawPencil(event){
             if(event.buttons == 1 || event.buttons == 3){
                 let lastLine = this.art[this.art.length - 1];
                 lastLine.points += `${event.clientX},${event.clientY} `;
             }
         },
-
+        // push x,y cordinates of current cursor position of the eraser
         drawEraser(event){
             if(event.buttons == 1 || event.buttons == 3){
                 let lastLine = this.art[this.art.length - 1];
-
                 lastLine.points += `${event.clientX},${event.clientY} `;
             }
         },
-
+        // saves the art object to localStorage
         saveArt(){
             this.name = prompt('Enter File Name', this.name);
             if(this.name)
@@ -148,7 +146,7 @@ const app = new Vue({
                 localStorage.setItem(`art_${this.name}`, JSON.stringify(app.art));
             }
         },
-
+        // toggle open items list
         showOpen(){
             this.openModal = !this.openModal;
             if(this.openModal){
@@ -161,14 +159,13 @@ const app = new Vue({
                 }
             } 
         },
-
+        // retrive data from localstorage and asign to art array objects
         openArt(event){
             let key = event.target.value;
             this.name = key.substring(4, key.length)
-            this.art = JSON.parse(localStorage.getItem(key));
-            
+            this.art = JSON.parse(localStorage.getItem(key));      
         },
-        
+        // import a .drw file read into text and asign the parsing result of jsonify string to art array of objects
         importArt(event){
             var fr=new FileReader(); 
             fr.onload=function(){ 
@@ -176,9 +173,8 @@ const app = new Vue({
             } 
             fr.readAsText(event.target.files[0]); 
         },
-
+        // jsonify art array of objects and make available to download that .drw (plain text) file
         exportArt(){
-            
             var textFile = null,
             makeTextFile = function (text) {
             var data = new Blob([text], {type: 'text/plain'});
@@ -188,7 +184,6 @@ const app = new Vue({
             textFile = window.URL.createObjectURL(data);
             return textFile;
             };
-
             var file_path = `host/path/${this.name}.drw`;
             var a = document.createElement('A');
             a.href = makeTextFile(JSON.stringify(app.art));
@@ -197,12 +192,13 @@ const app = new Vue({
             a.click();
             document.body.removeChild(a);      
         },
-
+        // erase all the data of from artboard
         trash(){
             if(confirm("Are you sure?")){
                 this.art = [];
             }
         },
+        // lister for keydown events
         keydown(event){
             if(this.tool == 'rect' && this.art.length > 0)
             {
@@ -218,6 +214,5 @@ const app = new Vue({
         }
     },
 });
-
 
 document.addEventListener("keydown", app.keydown);

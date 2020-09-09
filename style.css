@@ -1,5 +1,4 @@
 @import url('https://fonts.googleapis.com/css2?family=Balsamiq+Sans&display=swap');
-
 *{
     font-family: 'Balsamiq Sans', cursive;
     margin: 0;
@@ -8,16 +7,8 @@
 body{
     overflow: hidden;
 }
-
-
-::-webkit-scrollbar
-{
-    display: none;
-}
-
-
+::-webkit-scrollbar { display: none; }
 .menu{
-
     position: absolute;
     top: 20px;
     left: 20px;
@@ -49,36 +40,25 @@ body{
     background-color: rgba(179, 179, 179, 0.767);
     cursor: pointer;
 }
-
 .itemOptions{
     background-color: rgba(102, 100, 100, 0.295);
     border-bottom-left-radius: 20px;
     border-bottom-right-radius: 20px;
-    
     animation-name: opacity;
     animation-duration: 1s;
     animation-fill-mode: forwards;
     opacity: 0;
     overflow: hidden;
 }
-@keyframes opacity{
-    to{
-        opacity: 1;
-    }
-}
-
-
-
+@keyframes opacity{ to{ opacity: 1; }}
 .itemOptions li{
     list-style: none;
     padding: 10px 20px;
-    
 }
 .itemOptions li i{
     margin-right: 10px;
     pointer-events: none;
 }
-
 .itemOptions li:hover{
     background-color:#949494;
     cursor: pointer;
@@ -91,15 +71,12 @@ body{
 .activeTool{
     background-color: rgba(179, 179, 179, 0.767);
 }
-
 .colorPicker{
     border: none;
 }
-
 #openOptions{
     padding: 0;
 }
-
 #openOptions select{
     height: 100%;
     width: 100%;
@@ -109,21 +86,12 @@ body{
     color: white;
     outline: none;
 }
-
 #stroke-width{
     width: auto;
 }
 #stroke-width:hover{
     background-color: initial;
 }
-
-
-
-
-
-
-
-
 @media print {
     .menu{
         display: none;
