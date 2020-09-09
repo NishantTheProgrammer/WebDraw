@@ -2,6 +2,7 @@ const app = new Vue({
     el: '#app',
     data() {
         return {
+            art: [],
             name: 'draw',
             hamburger: false,
             dark: true,
@@ -9,51 +10,11 @@ const app = new Vue({
             openOptions: [],
             tool: 'pencil',
 
-
             stroke: '#ff0000',
             fill: '#821717',
             strokeWidth: 5,
-            linecap: 'butt',
+            linecap: 'butt'
 
-            art: {
-                polyline: [],
-                line: [],
-                rect: [],
-                circle: [],
-                eraser: []
-            }
-        }
-    },
-    computed: {
-        points(){
-            let polylines = [];
-            let p;
-            this.art.polyline.forEach(polyline => {
-                p = '';
-                polyline.forEach(point => {
-                    p += `${point.x},${point.y} `;
-                });
-                polylines.push(p);
-            });
-
-            console.log(polylines);
-
-            return polylines;
-        },
-        eraserPoints(){
-            let polylines = [];
-            let p;
-            this.art.eraser.forEach(eraser => {
-                p = '';
-                eraser.forEach(point => {
-                    p += `${point.x},${point.y} `;
-                });
-                polylines.push(p);
-            });
-
-            console.log(polylines);
-
-            return polylines;
         }
     },
     methods: {
@@ -83,7 +44,8 @@ const app = new Vue({
         },
 
         startLine(event){
-            this.art.line.push({
+            this.art.push({
+                tool: 'line',
                 x1: event.clientX, y1: event.clientY,
                 x2: event.clientX, y2: event.clientY,
                 stroke: this.stroke,
@@ -93,7 +55,8 @@ const app = new Vue({
         },
 
         startRect(event){
-            this.art.rect.push({
+            this.art.push({
+                tool: 'rect',
                 x: event.clientX, y: event.clientY,
                 width: 0, height: 0,
                 stroke: this.stroke,
@@ -104,49 +67,47 @@ const app = new Vue({
         },
 
         startCircle(event){
-            this.art.circle.push({
+            this.art.push({
+                tool: 'circle',
                 x: event.clientX, y: event.clientY,
                 stroke: this.stroke,
                 fill: this.fill,
                 strokeWidth: this.strokeWidth,
                 radius: 0
             });
-            console.log(this.art.circle)
         },
-
-
 
         startPencil(event){
             
-            this.art.polyline.push([{
-                x: event.clientX, 
-                y: event.clientY,
+            this.art.push({
+                tool: 'polyline',
+                points: `${event.clientX},${event.clientY} `,
                 width: this.strokeWidth != 0 ? this.strokeWidth : 1,
                 stroke: this.stroke
-            }]);
+            });
         },
 
         startEraser(event){
-            console.log('hi');
-            this.art.eraser.push([{
-                x: event.clientX, 
-                y: event.clientY,
+            
+            this.art.push({
+                tool: 'eraser',
+                points: `${event.clientX},${event.clientY} `,
                 width: this.strokeWidth != 0 ? this.strokeWidth : 1,
-            }]);
+                stroke: this.dark ? 'black' : 'white'
+            });
         },
-
-
 
         drawLine(event){
             if(event.buttons == 1 || event.buttons == 3){
-                let lastLine = this.art.line[this.art.line.length - 1];
+                let lastLine = this.art[this.art.length - 1];
                 lastLine.x2 = event.clientX;
                 lastLine.y2 = event.clientY;
             }
         },
+
         drawCircle(event){
             if(event.buttons == 1 || event.buttons == 3){
-                let lastCircle = this.art.circle[this.art.circle.length - 1];
+                let lastCircle = this.art[this.art.length - 1];
                 // pythagoras theorem
 
                 let a = Math.abs(lastCircle.x - event.clientX);
@@ -154,9 +115,10 @@ const app = new Vue({
                 lastCircle.radius = Math.sqrt((a * a) + (b * b));
             }
         },
+
         drawRect(event){
             if(event.buttons == 1 || event.buttons == 3){
-                let lastRect = this.art.rect[this.art.rect.length - 1];
+                let lastRect = this.art[this.art.length - 1];
                 if(event.clientX - lastRect.x > 0 && event.clientY - lastRect.y > 0)
                 {
                     lastRect.width = event.clientX - lastRect.x;
@@ -166,36 +128,27 @@ const app = new Vue({
         },
         drawPencil(event){
             if(event.buttons == 1 || event.buttons == 3){
-                let lastLine = this.art.polyline[this.art.polyline.length - 1];
-
-                lastLine.push({
-                    x: event.clientX,
-                    y: event.clientY
-                })
+                let lastLine = this.art[this.art.length - 1];
+                lastLine.points += `${event.clientX},${event.clientY} `;
             }
         },
 
-        
         drawEraser(event){
             if(event.buttons == 1 || event.buttons == 3){
-                let lastLine = this.art.eraser[this.art.eraser.length - 1];
+                let lastLine = this.art[this.art.length - 1];
 
-                lastLine.push({
-                    x: event.clientX,
-                    y: event.clientY
-                })
+                lastLine.points += `${event.clientX},${event.clientY} `;
             }
         },
-
 
         saveArt(){
             this.name = prompt('Enter File Name', this.name);
             if(this.name)
             {
-                console.log(this.name);
                 localStorage.setItem(`art_${this.name}`, JSON.stringify(app.art));
             }
         },
+
         showOpen(){
             this.openModal = !this.openModal;
             if(this.openModal){
@@ -208,6 +161,7 @@ const app = new Vue({
                 }
             } 
         },
+
         openArt(event){
             let key = event.target.value;
             this.name = key.substring(4, key.length)
@@ -243,22 +197,23 @@ const app = new Vue({
             a.click();
             document.body.removeChild(a);      
         },
+
         trash(){
             if(confirm("Are you sure?")){
-                this.art.line = [];
-                this.art.rect = [];
-                this.art.circle = [];
-                this.art.polyline = [];
-                this.art.eraser = [];
+                this.art = [];
             }
         },
         keydown(event){
-            if(this.tool == 'rect' && this.art.rect.length > 0)
+            if(this.tool == 'rect' && this.art.length > 0)
             {
-                let lastRect = this.art.rect[this.art.rect.length - 1];
+                let lastRect = this.art[this.art.length - 1];
                 event.key == 'ArrowDown' && lastRect.radius > 0 ? lastRect.radius -= 2 : '';
                 event.key == 'ArrowUp' ? lastRect.radius += 2 : '';
-                console.log(lastRect.radius)
+            }
+            event.key == 'z' && event.ctrlKey ? this.art.pop() : "";
+            if(event.key == 's' && event.ctrlKey){
+                event.preventDefault(); 
+                this.saveArt();
             }
         }
     },
