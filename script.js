@@ -11,6 +11,7 @@ const app = new Vue({
             tool: 'pencil',
 
             stroke: '#ff0000',
+            text: 'Hello',
             fill: '#821717',
             strokeWidth: 5,
             linecap: 'butt'
@@ -29,6 +30,7 @@ const app = new Vue({
                 case 'rect': this.drawRect(event); break;
                 case 'pencil': this.drawPencil(event); break;
                 case 'eraser': this.drawEraser(event); break;
+                case 'text': this.drawText(event); break;
             }
         },
         // functions runs on click on svg to insert a new SVG child object
@@ -40,6 +42,7 @@ const app = new Vue({
                 case 'rect': this.startRect(event); break;
                 case 'pencil': this.startPencil(event); break;
                 case 'eraser': this.startEraser(event); break;
+                case 'text': this.startText(event); break;
             }
         },
         // starts line both starting and ending point are initially are cordinates of cursor
@@ -65,7 +68,7 @@ const app = new Vue({
                 radius: 0
             });
         },
-        // starts rectangle x and y point are initially are cordinates of cursor radius is zero
+        // starts Circle x and y point are initially are cordinates of cursor radius is zero
         startCircle(event){
             this.art.push({
                 tool: 'circle',
@@ -93,6 +96,16 @@ const app = new Vue({
                 width: this.strokeWidth != 0 ? this.strokeWidth : 1
             });
         },
+        // start Text
+        startText(event){
+            this.art.push({
+                tool: 'text',
+                x: event.clientX, y: event.clientY,
+                text: this.text,
+                size: this.strokeWidth != 0 ? this.strokeWidth : 1,
+                stroke: this.stroke
+            });
+        },
         // update endpoint of line
         drawLine(event){
             if(event.buttons == 1 || event.buttons == 3){
@@ -112,7 +125,7 @@ const app = new Vue({
                 lastCircle.radius = Math.sqrt((a * a) + (b * b));
             }
         },
-        // update height and width of the rectangle
+        
         drawRect(event){
             if(event.buttons == 1 || event.buttons == 3){
                 let lastRect = this.art[this.art.length - 1];
@@ -135,6 +148,14 @@ const app = new Vue({
             if(event.buttons == 1 || event.buttons == 3){
                 let lastLine = this.art[this.art.length - 1];
                 lastLine.points += `${event.clientX},${event.clientY} `;
+            }
+        },
+        // update x,y cordinates of Text
+        drawText(event){
+            if(event.buttons == 1 || event.buttons == 3){
+                let text = this.art[this.art.length - 1];
+                text.x = event.clientX;
+                text.y = event.clientY;
             }
         },
         // saves the art object to localStorage

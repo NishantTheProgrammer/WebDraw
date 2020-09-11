@@ -92,6 +92,16 @@ body{
 #stroke-width:hover{
     background-color: initial;
 }
+svg text{
+    user-select: none;
+
+}
+#textInput{
+    border-radius: 40px;
+    border: none;
+    padding: 5px 10px;
+    outline: none;
+}
 @media print {
     .menu{
         display: none;

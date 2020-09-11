@@ -19,6 +19,8 @@
                 <li @click="selectTool('line', $event)" title="Line" :class="{activeTool: tool == 'line'}"><i class="fas fa-slash"></i></li>
                 <li @click="selectTool('circle', $event)" title="Circle" :class="{activeTool: tool == 'circle'}"><i class="far fa-circle"></i></li>
                 <li @click="selectTool('rect', $event)" title="Rectangle" :class="{activeTool: tool == 'rect'}"><i class="far fa-square"></i></li>
+                <li @click="selectTool('text', $event)" title="Text" :class="{activeTool: tool == 'text'}"><i class="fa fa-font"></i></li>
+                <li title="Enter Text" id="stroke-width" v-if="tool == 'text'" ><input type="text" id="textInput" v-model="text"></li>
                 <li title="Stroke"><input type="color" class="colorPicker" v-model="stroke"></li>
                 <li title="Fill" v-if="tool == 'rect' || tool == 'circle'"><input type="color" class="colorPicker" v-model="fill"></li>
                 <li  title="Stroke Linecap" v-if="tool == 'line'">
@@ -92,6 +94,9 @@
                     stroke: dark ? 'black' : 'white', 
                     'stroke-width': tool.width}" 
                 />
+
+                <text v-if="tool.tool == 'text'" :x="tool.x" :y="tool.y" :fill="tool.stroke" :font-size="tool.size * 4">{{ tool.text}}</text>
+
             </template>
         </svg>
     </div>
