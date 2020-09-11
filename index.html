@@ -4,13 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="This is web based drawing tool made with JavaScript (vue.js) which contain functions related to print and save the drawings">
+    <link rel="icon" href="./cursors/pencil.png">
     <link rel="stylesheet" href="./style.css">
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="https://kit.fontawesome.com/029682b453.js" crossorigin="anonymous"></script>
     <title>WebDraw</title>
 </head>
 <body>
-    <div id="app">
+    <div id="app" :style="{'background-color' : dark ? 'black' : 'white'}" >
         <div class="menu" :style="{'color' : dark ? 'white' : 'black', 'background-color' : dark ? 'rgb(102, 100, 100)' : 'rgb(223 223 223)'}">
             <ul class="navItems">
                 <li id="hamburger" @click="hamburger = !hamburger"><i class="fas" :class="{'fa-bars': !hamburger, 'fa-times-circle': hamburger}"></i></li>
@@ -20,6 +21,15 @@
                 <li @click="selectTool('circle', $event)" title="Circle" :class="{activeTool: tool == 'circle'}"><i class="far fa-circle"></i></li>
                 <li @click="selectTool('rect', $event)" title="Rectangle" :class="{activeTool: tool == 'rect'}"><i class="far fa-square"></i></li>
                 <li @click="selectTool('text', $event)" title="Text" :class="{activeTool: tool == 'text'}"><i class="fa fa-font"></i></li>
+                <li title="Image" :class="{activeTool: tool == 'img'}" style="position: relative;">
+                    <i class="fa fa-image" style="position: absolute;"></i>
+                    <input 
+                        @click="selectTool('img', $event)" 
+                        @change="onFileChange"  
+                        type="file" 
+                        style="position: absolute; height: 100%; width: 100%; opacity: 0;"
+                    />
+                </li>
                 <li title="Enter Text" id="stroke-width" v-if="tool == 'text'" ><input type="text" id="textInput" v-model="text"></li>
                 <li title="Stroke"><input type="color" class="colorPicker" v-model="stroke"></li>
                 <li title="Fill" v-if="tool == 'rect' || tool == 'circle'"><input type="color" class="colorPicker" v-model="fill"></li>
@@ -96,6 +106,8 @@
                 />
 
                 <text v-if="tool.tool == 'text'" :x="tool.x" :y="tool.y" :fill="tool.stroke" :font-size="tool.size * 4">{{ tool.text}}</text>
+                
+                <image v-if="tool.tool == 'img'" :href="tool.img" :x="tool.x" :y="tool.y" :width="tool.width + 'px'"/>
 
             </template>
         </svg>

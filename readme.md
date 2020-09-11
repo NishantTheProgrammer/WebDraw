@@ -11,11 +11,14 @@ WebDraw is web based drawing tool made with JavaScript (vue.js) which contain fo
   - Circle
   - Rectangle
   - Eraser
+  - Text
+  - Image
 
 # New Features!
 
   - The layer issue is now fixed
   - Undo with CTRL+Z
+  - Save with CTRL+S
   - Border radius of rectangle can be adjust with up/down keys
 
 

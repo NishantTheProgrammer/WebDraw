@@ -9,6 +9,7 @@ const app = new Vue({
             openModal: false,
             openOptions: [],
             tool: 'pencil',
+            img: '',
 
             stroke: '#ff0000',
             text: 'Hello',
@@ -18,6 +19,12 @@ const app = new Vue({
         }
     },
     methods: {
+        // asign blob address of uploaded image to img
+        onFileChange(event) {
+            const file = event.target.files[0];
+            this.img = URL.createObjectURL(file);
+        },
+        // change tool
         selectTool(tool, event){
             this.tool = tool;
         },
@@ -31,6 +38,7 @@ const app = new Vue({
                 case 'pencil': this.drawPencil(event); break;
                 case 'eraser': this.drawEraser(event); break;
                 case 'text': this.drawText(event); break;
+                case 'img': this.drawImg(event); break;
             }
         },
         // functions runs on click on svg to insert a new SVG child object
@@ -43,6 +51,7 @@ const app = new Vue({
                 case 'pencil': this.startPencil(event); break;
                 case 'eraser': this.startEraser(event); break;
                 case 'text': this.startText(event); break;
+                case 'img': this.startImg(event); break;
             }
         },
         // starts line both starting and ending point are initially are cordinates of cursor
@@ -106,6 +115,15 @@ const app = new Vue({
                 stroke: this.stroke
             });
         },
+        // start image
+        startImg(event){
+            this.art.push({
+                tool: 'img',
+                img: this.img,
+                width: 0,
+                x: event.clientX, y: event.clientY,
+            });
+        },
         // update endpoint of line
         drawLine(event){
             if(event.buttons == 1 || event.buttons == 3){
@@ -125,7 +143,7 @@ const app = new Vue({
                 lastCircle.radius = Math.sqrt((a * a) + (b * b));
             }
         },
-        
+        // update height and width of the rectange
         drawRect(event){
             if(event.buttons == 1 || event.buttons == 3){
                 let lastRect = this.art[this.art.length - 1];
@@ -133,6 +151,16 @@ const app = new Vue({
                 {
                     lastRect.width = event.clientX - lastRect.x;
                     lastRect.height = event.clientY - lastRect.y;
+                }
+            }
+        },
+        // update width of the image
+        drawImg(event){
+            if(event.buttons == 1 || event.buttons == 3){
+                let lastImg = this.art[this.art.length - 1];
+                if(event.clientX - lastImg.x > 0 && event.clientY - lastImg.y > 0)
+                {
+                    lastImg.width = event.clientX - lastImg.x;
                 }
             }
         },
