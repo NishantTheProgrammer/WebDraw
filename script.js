@@ -5,7 +5,7 @@ const app = new Vue({
             art: [],
             name: 'draw',
             hamburger: false,
-            help: true,
+            help: false,
             dark: true,
             openModal: false,
             openOptions: [],
