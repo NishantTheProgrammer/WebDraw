@@ -5,6 +5,7 @@ const app = new Vue({
             art: [],
             name: 'draw',
             hamburger: false,
+            help: true,
             dark: true,
             openModal: false,
             openOptions: [],
@@ -62,7 +63,8 @@ const app = new Vue({
                 x2: event.clientX, y2: event.clientY,
                 stroke: this.stroke,
                 strokeWidth: this.strokeWidth != 0 ? this.strokeWidth : 1,      // line should at least have 1 stroke width
-                linecap: this.linecap
+                linecap: this.linecap,
+                rotate: 0
             });
         },
         // starts rectangle x and y point are initially are cordinates of cursor height and width is also 0
@@ -74,7 +76,8 @@ const app = new Vue({
                 stroke: this.stroke,
                 fill: this.fill,
                 strokeWidth: this.strokeWidth,
-                radius: 0
+                radius: 0,
+                rotate: 0
             });
         },
         // starts Circle x and y point are initially are cordinates of cursor radius is zero
@@ -112,7 +115,8 @@ const app = new Vue({
                 x: event.clientX, y: event.clientY,
                 text: this.text,
                 size: this.strokeWidth != 0 ? this.strokeWidth : 1,
-                stroke: this.stroke
+                stroke: this.stroke,
+                rotate: 0
             });
         },
         // start image
@@ -122,6 +126,7 @@ const app = new Vue({
                 img: this.img,
                 width: 0,
                 x: event.clientX, y: event.clientY,
+                rotate: 0
             });
         },
         // update endpoint of line
@@ -248,11 +253,42 @@ const app = new Vue({
         },
         // lister for keydown events
         keydown(event){
-            if(this.tool == 'rect' && this.art.length > 0)
-            {
-                let lastRect = this.art[this.art.length - 1];
-                event.key == 'ArrowDown' && lastRect.radius > 0 ? lastRect.radius -= 2 : '';
-                event.key == 'ArrowUp' ? lastRect.radius += 2 : '';
+            if(this.art.length > 0){
+                let last = this.art[this.art.length - 1];
+                switch(this.tool){
+                    case 'rect':
+                        event.key == 'ArrowDown' && last.radius > 0 ? last.radius -= 2 : '';
+                        event.key == 'ArrowUp' ? last.radius += 2 : '';
+                        event.key == 'ArrowLeft' ? last.rotate += 2 : '';
+                        event.key == 'ArrowRight' ? last.rotate -= 2 : '';
+                        event.key == 'a' ? last.x-= 2 : '';
+                        event.key == 'd' ? last.x+= 2 : '';
+                        event.key == 'w' ? last.y-= 2 : '';
+                        event.key == 's' ? last.y+= 2 : '';
+                        break;
+                    case 'img':
+                        event.key == 'ArrowLeft' ? last.rotate += 2 : '';
+                        event.key == 'ArrowRight' ? last.rotate -= 2 : '';
+                        event.key == 'a' ? last.x-= 2 : '';
+                        event.key == 'd' ? last.x+= 2 : '';
+                        event.key == 'w' ? last.y-= 2 : '';
+                        event.key == 's' ? last.y+= 2 : '';
+                        break;
+                    case 'text':
+                        event.key == 'ArrowLeft' ? last.rotate += 2 : '';
+                        event.key == 'ArrowRight' ? last.rotate -= 2 : '';
+                        event.key == 'a' ? last.x-= 2 : '';
+                        event.key == 'd' ? last.x+= 2 : '';
+                        event.key == 'w' ? last.y-= 2 : '';
+                        event.key == 's' ? last.y+= 2 : '';
+                        break;
+                    case 'circle':
+                        event.key == 'a' ? last.x-= 2 : '';
+                        event.key == 'd' ? last.x+= 2 : '';
+                        event.key == 'w' ? last.y-= 2 : '';
+                        event.key == 's' ? last.y+= 2 : '';
+                        break;
+                }
             }
             event.key == 'z' && event.ctrlKey ? this.art.pop() : "";
             if(event.key == 's' && event.ctrlKey){

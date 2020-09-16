@@ -12,6 +12,18 @@
 </head>
 <body>
     <div id="app" :style="{'background-color' : dark ? 'black' : 'white'}" >
+        <div class="helpMenu" :class="{helpOpen: help}" :style="{'color' : dark ? 'white' : 'black', 'background-color' : dark ? 'rgb(102, 100, 100)' : 'rgb(223 223 223)'}">
+            <i @click="help = !help" class="fas" :class="{'fa-question': !help, 'fa-times-circle': help}"></i>
+            <ul v-if="help">
+                <li style="margin-top: 50px;">Rotate last element with ← → keys</li>
+                <li>Move last element with w, a, s, d keys</li>
+                <li>Last rectangle corner radius ↑ to increase ↓ to decrease</li>
+                <li>Import and export files .drw(draw) extension</li>
+                <li>Save your art from localstorage and open that</li>
+                <li>UNDO &nbsp;&nbsp;&nbsp;&nbsp; CTRL+Z</li>
+                <li>SAVE &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; CTRL+S</li>
+            </ul>
+        </div>
         <div class="menu" :style="{'color' : dark ? 'white' : 'black', 'background-color' : dark ? 'rgb(102, 100, 100)' : 'rgb(223 223 223)'}">
             <ul class="navItems">
                 <li id="hamburger" @click="hamburger = !hamburger"><i class="fas" :class="{'fa-bars': !hamburger, 'fa-times-circle': hamburger}"></i></li>
@@ -71,7 +83,8 @@
                     :height="tool.height"
                     :rx="tool.radius"
                     :ry="tool.radius"
-                    :style="{fill: tool.fill, stroke: tool.stroke, 'stroke-width': tool.strokeWidth}"
+                    :style="{fill: tool.fill, stroke: tool.stroke, 'stroke-width': tool.strokeWidth, 
+                    transform: `rotate(${tool.rotate}deg)`}"
                 />
 
                 <line v-if="tool.tool == 'line'" 
@@ -79,7 +92,8 @@
                     :y1="tool.y1" 
                     :x2="tool.x2" 
                     :y2="tool.y2" 
-                    :style="{stroke: tool.stroke, 'stroke-width': tool.strokeWidth, 'stroke-linecap': tool.linecap}" 
+                    :style="{stroke: tool.stroke, 'stroke-width': tool.strokeWidth, 'stroke-linecap': tool.linecap, 
+                    transform: `rotate(${tool.rotate}deg)`}" 
                 />
 
                 <circle v-if="tool.tool == 'circle'" 
@@ -105,9 +119,9 @@
                     'stroke-width': tool.width}" 
                 />
 
-                <text v-if="tool.tool == 'text'" :x="tool.x" :y="tool.y" :fill="tool.stroke" :font-size="tool.size * 4">{{ tool.text}}</text>
+                <text v-if="tool.tool == 'text'" :x="tool.x" :y="tool.y" :fill="tool.stroke" :font-size="tool.size * 4" :style="{transform: `rotate(${tool.rotate}deg)`}">{{ tool.text}}</text>
                 
-                <image v-if="tool.tool == 'img'" :href="tool.img" :x="tool.x" :y="tool.y" :width="tool.width + 'px'"/>
+                <image v-if="tool.tool == 'img'" :href="tool.img" :x="tool.x" :y="tool.y" :width="tool.width + 'px'"/ :style="{transform: `rotate(${tool.rotate}deg)`}">
 
             </template>
         </svg>

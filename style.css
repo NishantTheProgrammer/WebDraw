@@ -15,15 +15,45 @@ body{
     border-radius: 20px;
     transition: background-color, color .5s ease;
 }
+.helpMenu{
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    height: 50px;
+    width: 50px;
+    overflow: hidden;
+    border-radius: 20px;
+    z-index: 2;
+    padding: 10px;
+    transition: all 1s ease;
+}
+.helpMenu i:hover{
+    background-color: rgba(179, 179, 179, 0.767);
+    cursor: pointer;
+}
+.helpOpen{
+    height: 400px;
+    width: 700px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+.helpOpen i{
+    float: right;
+}
+.helpOpen ul li{
+    margin: 20px;
+    font-size: 1.3rem;
+    list-style: none;
+}
 .navItems{
     display: flex;
     padding: 10px;
     list-style: none;
     transition: background-color .5s ease;
 }
-.navItems li{
+.navItems li, .helpMenu i{
     border-radius: 100%;
-    font-size: 1.2rem;
     margin: 5px;
     height: 30px;
     width: 30px;
@@ -95,6 +125,10 @@ body{
 svg text{
     user-select: none;
 
+}
+svg *{
+    transform-box: fill-box;
+    transform-origin: center;
 }
 #textInput{
     border-radius: 40px;

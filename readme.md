@@ -1,12 +1,12 @@
 # WebDraw
 
-[![N|Solid](https://vuejs.org/images/logo.png)](https://nodesource.com/products/nsolid)
+[![N|Solid](https://vuejs.org/images/logo.png)](https://nodesource.com/products/nsolid =50x)
 
 
 
 WebDraw is web based drawing tool made with JavaScript (vue.js) which contain following features
 
-  - Pencile
+  - Pencil
   - Line
   - Circle
   - Rectangle
@@ -16,7 +16,8 @@ WebDraw is web based drawing tool made with JavaScript (vue.js) which contain fo
 
 # New Features!
 
-  - The layer issue is now fixed
+  - Rotate last element with ← → keys
+  - Move last element with w, a, s, d keys
   - Undo with CTRL+Z
   - Save with CTRL+S
   - Border radius of rectangle can be adjust with up/down keys
