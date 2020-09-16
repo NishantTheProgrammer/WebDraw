@@ -1,6 +1,6 @@
 # WebDraw
 
-[![N|Solid](https://vuejs.org/images/logo.png)](https://nodesource.com/products/nsolid =50x)
+[![N|Solid](https://vuejs.org/images/logo.png)](https://nodesource.com/products/nsolid)
 
 
 
